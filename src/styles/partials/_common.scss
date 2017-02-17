@@ -4,4 +4,12 @@ header {
 
 main {
   background: #fafafa;
+
+  .main-content-container {
+    margin: 35px auto 0 auto;
+    max-width: 1000px;
+    min-height: 100vh;
+    padding-top: 35px;
+    position: relative;
+  }
 }
