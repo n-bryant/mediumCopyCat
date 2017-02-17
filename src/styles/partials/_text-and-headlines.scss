@@ -3,6 +3,7 @@ body {
   font: 14px/1.4 $primaryFont;
 }
 
+/* Promo Bar */
 .promo-bar-container {
   color: #fff;
 
@@ -43,5 +44,17 @@ body {
         font-size: 18px!important;
       }
     }
+  }
+
+  .sidebar-container {
+    display: none;
+  }
+}
+
+/* Sidebar */
+.sidebar-container {
+  .welcome {
+    font-size: 16px;
+    font-weight: 700;
   }
 }
