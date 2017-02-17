@@ -1,4 +1,3 @@
-
 .meta-bar-container {
     position: absolute;
     display: block;
@@ -133,20 +132,6 @@ span:nth-child(1) svg path:nth-child(4){
     padding-right: 8px;
 }
 
-.meta-bar-button-write {
-    color: rgba(0,0,0,.37);
-    text-decoration: none;
-    display: inline-block;
-    font-family: -apple-system, BlinkMacSystemFont, "Roboto", sans-serif;
-    padding-right: 8px;
-    margin-right: 15px;
-    word-spacing: 1px;
-
-    &:active {
-        color: rgba(0,0,0,.6);
-    }
-}
-
 .meta-bar-button {
     @media screen and (max-width: 767px) {
         line-height: inherit;
@@ -162,7 +147,7 @@ span:nth-child(1) svg path:nth-child(4){
     text-decoration: none;
     font-size: 14px;
     line-height: 30px;
-    font-family: -apple-system, BlinkMacSystemFont, "Roboto", sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-weight: 400;
 }
 
@@ -173,7 +158,7 @@ line-height: 30px;
 
 .buttonSet>.button-search{
     margin-left: 0;
-    padding-left: 7px;
+    padding-left: 8px;
     padding-right: 0;
     margin-right: 0;
 }
@@ -192,65 +177,4 @@ line-height: 30px;
 
 .buttonSet span:nth-child(1) svg path:nth-child(1) {
     fill: rgba(0,0,0,.44);
-}
-
-.meta-bar-inner-links {
-    position: relative;
-    max-width: 1000px;
-    margin-left: auto;
-    margin-right: auto;
-
-    &:before {
-        display: table;
-        content: " ";
-    }
-}
-
-.meta-bar-navigation {
-    box-sizing: border-box;
-    box-shadow: 0 2px 2px -2px rgba(0,0,0,.15);
-    overflow-y: hidden;
-    height: 50px;
-    position: relative;
-    z-index: 500;
-
-    @media screen and (max-width: 767px) {
-        height: 39px!important;
-    }
-}
-
-ul.meta-bar-links {
-    white-space: nowrap;
-    text-align: left;
-    border-top: 1px solid rgba(0,0,0,.05);
-    list-style: none;
-    list-style-image: none;
-    margin: 0;
-    overflow-x: auto;
-    overflow-y: hidden;
-    padding-top: 4px;
-    padding-bottom: 5px;
-
-    @media (max-width: 767px) {
-        padding-right: 20px;
-        padding-left: 20px;
-        padding-top: 0;
-    }
-
-    li {
-        padding: 10px 20px 18px 0;
-        font-size: 14px;
-        font-family: -apple-system, BlinkMacSystemFont, "Roboto", sans-serif;
-        letter-spacing: 0;
-        font-weight: 400;
-        font-style: normal;
-        color: rgba(0,0,0,.44);
-        fill: rgba(0,0,0,.44);
-        display: inline-block;
-
-        @media (max-width: 767px) {
-            padding-right: 12px;
-            margin-right: 0;
-        }
-    }
 }
