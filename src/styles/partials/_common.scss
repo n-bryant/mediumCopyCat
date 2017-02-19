@@ -2,14 +2,20 @@ header {
   height: 115px;
 }
 
-main {
+body {
   background: #fafafa;
+}
+
+main {
+  padding-top: 35px;
 
   .main-content-container {
-    margin: 35px auto 0 auto;
-    max-width: 1000px;
-    min-height: 100vh;
-    padding-top: 35px;
+    margin: 0 auto;
+    max-width: 1050px;
     position: relative;
   }
+}
+
+a {
+  text-decoration: none;
 }

@@ -1,0 +1,151 @@
+.stream-container {
+    max-width: 713px;
+    position: relative;
+}
+
+.stream-post-container {
+    background: #fff;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .04);
+    border: 1px solid rgba(0, 0, 0, .09);
+    padding-right: 20px;
+    padding-left: 20px;
+    margin-bottom: 10px;
+    border-radius: 3px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.stream-top-container {
+    margin-bottom: 10px;
+}
+
+.avatar-img {
+    display: inline-block;
+    vertical-align: middle;
+    border-radius: 100%;
+    width: 36px;
+    height: 36px;
+    margin-right: 7px;
+}
+
+.date-time {
+    display: block;
+
+    a {
+        color: $light;
+        text-decoration: none;
+        font-size: 12px;
+    }
+
+    .dot-divider {
+        &:after {
+            content: '·';
+            color: $light;
+        }
+    }
+
+    .reading-time {
+        text-decoration: none;
+        color: $light;
+        font-size: 12px;
+    }
+}
+.stream-title-container {
+    .stream-title {
+        font-size: 27px;
+        margin-left: -1.81px;
+        line-height: 1.04;
+        letter-spacing: -.028em;
+        font-weight: 700;
+        display: block;
+        margin-bottom: 8px;
+        text-align: left;
+    }
+
+    .stream-subtitle {
+        display: block;
+        margin-bottom: 7px;
+        font-size: 23px;
+        margin-left: -1.81px;
+        line-height: 1.22;
+        letter-spacing: -.022em;
+        color: $light;
+        font-weight: lighter;
+        text-align: left;
+    }
+
+    p {
+        margin-top: 10px;
+        font-size: 18px;
+        line-height: 1.58;
+        letter-spacing: -.004em;
+        text-align: left;
+        font-weight: lighter;
+        font-family: sans-serif;
+        margin-bottom: 10px;
+    }
+
+    span {
+        padding: 0;
+        line-height: inherit;
+        height: inherit;
+        font-size: 12px;
+        vertical-align: baseline;
+        color: $light;
+        text-align: left;
+        display: block;
+        margin-bottom: 20px;
+        a {
+            color: $light;
+        }
+    }
+}
+
+.stream-bottom-container {
+    justify-content: space-between;
+}
+.svg-icon-container {
+    .svgIcon-use{
+        margin-right: 3px;
+        fill: $green;
+        position: relative;
+        top: -3px;
+        cursor: pointer;
+
+        &:active {
+            fill: red;
+        }
+        &.is-favorited {
+          fill: red;
+        }
+    }
+    span {
+        width: 22px;
+        height: 30px;
+        vertical-align: top;
+        color: $light;
+    }
+}
+
+.responses-container {
+    display: inline-flex;
+}
+
+.responses {
+    color: $light;
+    display: inline-block;
+    vertical-align: top;
+    position: relative;
+    top: 4px;
+    cursor: pointer;
+}
+
+.svg-book-mark {
+    display: inline-block;
+    fill: $light;
+    cursor: pointer;
+
+    &:active {
+        fill: red;
+    }
+}
