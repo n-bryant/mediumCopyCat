@@ -3,6 +3,15 @@
     position: relative;
 }
 
+.article-dismiss-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: absolute;
+  right: .5rem;
+  top: .5rem;
+}
+
 .stream-post-container {
     background: #fff;
     box-shadow: 0 1px 4px rgba(0, 0, 0, .04);
@@ -13,6 +22,7 @@
     border-radius: 3px;
     padding-top: 15px;
     padding-bottom: 15px;
+    position: relative;
 }
 
 .stream-top-container {
@@ -105,6 +115,8 @@
     justify-content: space-between;
 }
 .svg-icon-container {
+  display: flex;
+
     .svgIcon-use{
         margin-right: 3px;
         fill: $green;
@@ -147,5 +159,9 @@
 
     &:active {
         fill: red;
+    }
+
+    &.is-bookmarked {
+      fill: red;
     }
 }
