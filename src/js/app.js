@@ -62,6 +62,7 @@
         this.description = articleData.article.description;
         this.favCount = articleData.favorites.count;
         this.isFav = articleData.favorites.favorited;
+        this.bookmarked = articleData.favorites.bookmarked;
         // this.responseCount = articleData.'';
         this.build();
       }
@@ -96,6 +97,7 @@
             img: this.img,
             title: this.title,
             isFav: this.isFav,
+            isBook: this.bookmarked,
             url: this.url
           };
         }
@@ -210,7 +212,7 @@
         tempObj.articleID = $(this).parents('.stream-post-container').attr('data-id');
         tempObj.isFav = $(this).attr('data-is-fav');
         console.log(tempObj);
-        // updateFavStatus(articleID, tempObj);
+        updateFavStatus(articleID, tempObj);
       });
 
       /* comment handling */
@@ -240,8 +242,9 @@
       });
       // deleting a comment
       $(streamContainer).on('click', '.responses-dismiss-btn', function() {
+        let articleID = $(this).parents('.comments-container').prev('.stream-post-container').attr('data-id');
         let commentID = $(this).parents('.stream-all-responses-container').attr('data-id');
-        deleteComment(commentID);
+        deleteComment(articleID, commentID);
       });
     }
 
@@ -349,10 +352,10 @@
     }
 
     // delete comment
-    function deleteComment(commentID) {
+    function deleteComment(articleID, commentID) {
       const settings = {
         method: 'DELETE',
-        url: `https://medium-copycat-api.herokuapp.com/articles/${commentID}/comments`,
+        url: `https://medium-copycat-api.herokuapp.com/articles/${articleID}/comments/${commentID}`,
         headers: {
             'content-type': 'application/json;charset=utf-8'
         }
@@ -454,8 +457,40 @@
     }
 
     // update bookmark status
-    function updateBookMarkStatus(articleID) {
+    function updateBookMarkStatus(articleID, input) {
+      const settings = {
+        method: 'POST',
+        url: `https://medium-copycat-api.herokuapp.com/articles/{articleID}`,
+        headers: {
+          "content-type": "application/json;charset=utf-8"
+        },
+        data: JSON.stringify({
+          "bookmarked": input.isTrue
+        })
+      }
+    }
 
+    // searches
+    function searchForArticles(query) {
+      streamContainer.innerHTML = '';
+      loading.show();
+      const settings = {
+        method: 'GET',
+        url: `https://medium-copycat-api.herokuapp.com/search/articles?q=${query}`
+      }
+
+      $.ajax(settings).then((response) => {
+        // console.log(response);
+        const streamList = response;
+        // creates new stream instance for each search result
+        for (let index = 0; index < streamList.length; index++) {
+          new Stream(streamList[index]);
+        }
+        loading.hide();
+        checkFavorited();
+      }).catch((error) => {
+          console.log(error);
+      });
     }
 
     // initialize with event listener bindings and initial template builds
