@@ -47,6 +47,35 @@
       }
     }
 
+    class NewComment {
+      constructor(commentData, articleID) {
+        this.id = commentData.id;
+        this.articleID = articleID;
+        this.author = commentData.author_name;
+        this.createdAt = commentData.created_at;
+        this.content = commentData.content;
+        this.parentComment = commentData.parent_comment_id;
+        this.build(this.articleID);
+      }
+
+      build(articleID) {
+        const source = document.querySelector('#responses-template').innerHTML;
+        const template = Handlebars.compile(source);
+        const context = {
+          id: this.id,
+          img: 'http://iosicongallery.com/img/512/medium-2015.png',
+          author: this.author,
+          date: this.createdAt.substring(0, 10),
+          content: this.content,
+          favCount: this.favCount,
+          responseCount: this.responseCount
+        };
+        const html = template(context);
+
+        $('.comments-container').append(html);
+      }
+    }
+
     class Stream {
       constructor(articleData, sectionName, templateName) {
         // console.log(articleData);
@@ -63,7 +92,7 @@
         this.favCount = articleData.favorites.count;
         this.isFav = articleData.favorites.favorited;
         this.bookmarked = articleData.favorites.bookmarked;
-        // this.responseCount = articleData.'';
+        this.responseCount = articleData.number_of_comments;
         this.build();
       }
 
@@ -97,6 +126,8 @@
             img: this.img,
             title: this.title,
             isFav: this.isFav,
+            favCount: this.favCount,
+            responseCount: this.responseCount,
             isBook: this.bookmarked,
             url: this.url
           };
@@ -110,8 +141,43 @@
         } else if (whichSection === 'politics'){
           $(politicsPreviewContainer).append(html);
         } else {
-          $(streamContainer).append(html);
+          $(streamContainer).prepend(html);
         }
+      }
+    }
+
+    class NewStream {
+      constructor(articleData) {
+        // console.log(articleData);
+        this.id = articleData.id;
+        this.author = articleData.author;
+        this.title = articleData.title;
+        this.url = articleData.url;
+        this.img = articleData.url_to_image;
+        this.date = articleData.published_at;
+        this.readTime = Math.floor(Math.random() * 60);
+        this.description = articleData.description;
+        this.build();
+      }
+
+      build(templateName) {
+        const source = document.querySelector('#streaming-template').innerHTML; // top, editor, or politics
+        const template = Handlebars.compile(source);
+        const context = {
+          id: this.id,
+          author: this.author,
+          date: this.date,
+          readTime: this.readTime,
+          img: this.img,
+          title: this.title,
+          isFav: this.isFav,
+          favCount: this.favCount,
+          responseCount: this.responseCount,
+          isBook: this.bookmarked,
+          url: this.url
+        };
+        const html = template(context);
+        $(streamContainer).prepend(html);
       }
     }
 
@@ -128,6 +194,23 @@
 
     // bind event listeners
     function bindEventListeners() {
+      // search button click
+      document.querySelector('.button-search').addEventListener('click', () => {
+        const searchFormContainer = document.querySelector('.search-form-container');
+        if ($(searchFormContainer).hasClass('is-hidden')) {
+          searchFormContainer.classList.remove('is-hidden');
+        } else {
+          searchFormContainer.classList.add('is-hidden');
+          document.querySelector('.search-form').reset();
+        }
+      });
+      // search form submit
+      document.querySelector('.search-form').addEventListener('submit', () => {
+        event.preventDefault();
+        let query = document.querySelector('.query').value;
+        searchForArticles(query);
+        document.querySelector('.search-form').reset();
+      });
       // promo bar dismiss button
       document.querySelector('.promo-bar-container .promo-dismiss-btn').addEventListener('click', () => {
         document.querySelector('.promo-bar-container').remove();
@@ -154,7 +237,6 @@
       /* article handling */
       // adding an article
       document.querySelector('.sidebar-promo .start-writing-btn').addEventListener('click', () => {
-        console.log('in');
         // hide stream list
         if (streamContainer.classList !== 'stream-container is-hidden') {
           streamContainer.classList.add('is-hidden');
@@ -204,6 +286,9 @@
           $(this).attr('data-is-fav', 'false');
         } else {
           $(this).attr('data-is-fav', 'true');
+          let numFavDisplay = $(this).parents('.svg-icon-container').children('.numFavorites');
+          let numFav = parseInt($(numFavDisplay).html(), 10) + 1;
+          numFavDisplay.html(numFav);
         }
 
         $(this).toggleClass('is-favorited');
@@ -212,8 +297,24 @@
         tempObj.articleID = $(this).parents('.stream-post-container').attr('data-id');
         tempObj.isFav = $(this).attr('data-is-fav');
         console.log(tempObj);
-        updateFavStatus(articleID, tempObj);
+        updateFavStatus(tempObj);
       });
+      // bookmarking an article
+      $(streamContainer).on('click', '.svg-book-mark', function() {
+       if ($(this).attr('data-is-book') === true) {
+         $(this).attr('data-is-book', 'false');
+       } else {
+         $(this).attr('data-is-book', 'true');
+       }
+
+       $(this).toggleClass('is-bookmarked');
+
+       let tempObj = {};
+       tempObj.articleID = $(this).parents('.stream-post-container').attr('data-id');
+       tempObj.isBook = $(this).attr('data-is-book');
+       console.log(tempObj);
+       updateBookMarkStatus(tempObj);
+     });
 
       /* comment handling */
       // adding a comment
@@ -222,11 +323,12 @@
         let tempObj = {};
 
         // store user input in tempObj and send data to addComment
-        tempObj.articleID = $(this).parents('.stream-post-container').attr('data-id');
+        tempObj.articleID = $(this).parents('.comments-container').prev('.stream-post-container').attr('data-id');
         tempObj.commentValue = document.querySelector('.response-text').value;
         // put in parent comment id from the data-id of the attribute of stream-all-responses-container
         // tempObj.parentID = document.querySelector('.stream-all-responses-container').attr('data-id').val();
         addComment(tempObj);
+        document.querySelector('.stream-response-form').reset();
       });
       // show responses
       $(streamContainer).on('click', '.responses', function() {
@@ -251,7 +353,7 @@
     // applies the correct styling on hearts
     function checkFavorited() {
       const favs = document.querySelectorAll('.svgIcon-use.heart-icon');
-      console.log(favs);
+      // console.log(favs);
       for (let index = 0; index < favs.length; index++) {
         if (favs[index].getAttribute('data-is-fav') === true) {
           favs[index].classList.add('is-favorited');
@@ -259,6 +361,20 @@
           favs[index].classList.remove('is-favorited');
         }
       }
+    }
+
+    function headerDocking() {
+      let num = 65; //number of pixels before modifying styles
+
+      $(window).bind('scroll', function () {
+        if ($(window).scrollTop() > num) {
+          $('.meta-bar-container').addClass('is-affixed');
+          $('.get-started').removeClass('is-hidden');
+        } else {
+          $('.meta-bar-container').removeClass('is-affixed');
+          $('.get-started').addClass('is-hidden');
+        }
+      });
     }
 
     // sidebar docking
@@ -296,7 +412,7 @@
           "content-type": "application/json;charset=utf-8"
         },
         data: JSON.stringify({
-          "author": input.author,
+          "author": input.authorNm,
           "description": input.description,
           "title": input.title,
           "url": input.url,
@@ -305,7 +421,7 @@
         })
       };
       $.ajax(settings).then((response) => {
-        new Stream(response);
+        new NewStream(response);
         console.log(response);
       }).catch((error) => {
         console.log(error);
@@ -316,7 +432,7 @@
     function addComment(input) {
       const settings = {
           method: 'POST',
-          url: `https://medium-copycat-api.herokupa.com/articles/${input.articleID}/comments`,
+          url: `https://medium-copycat-api.herokuapp.com/articles/${input.articleID}/comments`,
           headers: {
             "content-type": "application/json;charset=utf-8"
           },
@@ -328,6 +444,7 @@
         };
         $.ajax(settings).then((response) => {
           // let user know edit was successful
+          new NewComment(response);
           console.log(response);
         }).catch((error) => {
           console.log(error);
@@ -338,14 +455,15 @@
     function deleteArticle(articleID) {
       const settings = {
         method: 'DELETE',
-        url: `https://medium-copycat-api.herokuapp.com/articles${articleID}`,
+        url: `https://medium-copycat-api.herokuapp.com/articles/${articleID}`,
         headers: {
           'content-type': 'application/json;charset=utf-8'
         }
       };
-      $.ajax(deleteArtist).then((response) => {
+      $.ajax(settings).then((response) => {
         // let user know edit was successful
         console.log(response);
+        $(`.stream-post-container[data-id="${articleID}"]`).remove();
       }).catch((error) => {
          console.log(error);
       });
@@ -361,8 +479,9 @@
         }
       };
       $.ajax(settings).then((response) => {
-        $('.stream-response-container').remove();
-        console.log(response);
+        let toDelete = $(`.stream-all-responses-container[data-id="${commentID}"]`).parents('.stream-response-container').parents('.all-responses-wrapper');
+        $(toDelete).remove();
+        // console.log(response);
       }).catch((error) => {
         console.log(error);
       });
@@ -435,16 +554,16 @@
     }
 
     // update favorite status
-    function updateFavStatus(articleID, input) {
+    function updateFavStatus(input) {
       const settings = {
         method: 'POST',
-        url: `https://medium-copycat-api.herokuapp.com/marks/`,
+        url: 'https://medium-copycat-api.herokuapp.com/marks/',
         headers: {
           "content-type": "application/json;charset=utf-8"
         },
         data: JSON.stringify({
           "favorited": input.isFav,
-          "article_id": articleID
+          "article_id": input.articleID
         })
       };
 
@@ -457,17 +576,24 @@
     }
 
     // update bookmark status
-    function updateBookMarkStatus(articleID, input) {
+    function updateBookMarkStatus(input) {
       const settings = {
         method: 'POST',
-        url: `https://medium-copycat-api.herokuapp.com/articles/{articleID}`,
+        url: 'https://medium-copycat-api.herokuapp.com/marks/',
         headers: {
           "content-type": "application/json;charset=utf-8"
         },
         data: JSON.stringify({
-          "bookmarked": input.isTrue
+          "bookmarked": input.isBook,
+          "article_id": input.articleID
         })
-      }
+      };
+      $.ajax(settings).then((response) => {
+        // let user know edit was successful
+        console.log(response);
+      }).catch((error) => {
+        console.log(error);
+      });
     }
 
     // searches
@@ -495,6 +621,7 @@
 
     // initialize with event listener bindings and initial template builds
     function init() {
+      headerDocking();
       bindEventListeners();
       getFeaturedStreamResults('top');
       getFeaturedStreamResults('editor');

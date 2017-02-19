@@ -98,6 +98,7 @@ span:nth-child(1) svg path:nth-child(4){
 /* RIGHT BLOCK */
 
 .meta-bar-block-right {
+  align-items: center;
     @media (max-width: 767px) {
         text-align: right;
         height: 56px;
@@ -107,6 +108,16 @@ span:nth-child(1) svg path:nth-child(4){
     }
     height: 65px;
     float: right;
+}
+
+.search-form {
+  .query {
+    border: none;
+    border-bottom: 1px solid $light;
+    box-shadow: none;
+    color: $medium;
+    font-family: helvetica;
+  }
 }
 
 .buttonSet:last-child {
@@ -257,4 +268,17 @@ ul.meta-bar-links {
             margin-right: 0;
         }
     }
+}
+
+.get-started {
+    background: #00ab6b;
+    border: none;
+    border-radius: 999em;
+    cursor: pointer;
+    margin-left: -13px;
+    padding: 0 1rem;
+    color: #fafafa;
+    font-size: 14px;
+    height: 35px;
+    cursor: pointer;
 }

@@ -316,6 +316,7 @@ span:nth-child(1) svg path:nth-child(4) {
 
 /* RIGHT BLOCK */
 .meta-bar-block-right {
+  align-items: center;
   height: 65px;
   float: right; }
   @media (max-width: 767px) {
@@ -325,6 +326,13 @@ span:nth-child(1) svg path:nth-child(4) {
       right: 0;
       position: absolute;
       margin-right: 20px; } }
+
+.search-form .query {
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.44);
+  box-shadow: none;
+  color: rgba(0, 0, 0, 0.8);
+  font-family: helvetica; }
 
 .buttonSet:last-child {
   margin-right: 0; }
@@ -454,9 +462,29 @@ ul.meta-bar-links {
         padding-right: 12px;
         margin-right: 0; } }
 
+.get-started {
+  background: #00ab6b;
+  border: none;
+  border-radius: 999em;
+  cursor: pointer;
+  margin-left: -13px;
+  padding: 0 1rem;
+  color: #fafafa;
+  font-size: 14px;
+  height: 35px;
+  cursor: pointer; }
+
 .stream-container {
   max-width: 713px;
   position: relative; }
+
+.article-dismiss-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: absolute;
+  right: .5rem;
+  top: .5rem; }
 
 .stream-post-container {
   background: #fff;
@@ -467,7 +495,8 @@ ul.meta-bar-links {
   margin-bottom: 10px;
   border-radius: 3px;
   padding-top: 15px;
-  padding-bottom: 15px; }
+  padding-bottom: 15px;
+  position: relative; }
 
 .stream-top-container {
   margin-bottom: 10px; }
@@ -541,22 +570,23 @@ ul.meta-bar-links {
 .stream-bottom-container {
   justify-content: space-between; }
 
-.svg-icon-container .svgIcon-use {
-  margin-right: 3px;
-  fill: #00ab6b;
-  position: relative;
-  top: -3px;
-  cursor: pointer; }
-  .svg-icon-container .svgIcon-use:active {
-    fill: red; }
-  .svg-icon-container .svgIcon-use.is-favorited {
-    fill: red; }
-
-.svg-icon-container span {
-  width: 22px;
-  height: 30px;
-  vertical-align: top;
-  color: rgba(0, 0, 0, 0.44); }
+.svg-icon-container {
+  display: flex; }
+  .svg-icon-container .svgIcon-use {
+    margin-right: 3px;
+    fill: #00ab6b;
+    position: relative;
+    top: -3px;
+    cursor: pointer; }
+    .svg-icon-container .svgIcon-use:active {
+      fill: red; }
+    .svg-icon-container .svgIcon-use.is-favorited {
+      fill: red; }
+  .svg-icon-container span {
+    width: 22px;
+    height: 30px;
+    vertical-align: top;
+    color: rgba(0, 0, 0, 0.44); }
 
 .responses-container {
   display: inline-flex; }
@@ -574,6 +604,8 @@ ul.meta-bar-links {
   fill: rgba(0, 0, 0, 0.44);
   cursor: pointer; }
   .svg-book-mark:active {
+    fill: red; }
+  .svg-book-mark.is-bookmarked {
     fill: red; }
 
 /* General Sidebar Styles */
@@ -928,3 +960,10 @@ footer {
 
 .is-hidden {
   display: none; }
+
+.is-affixed {
+  visibility: visible;
+  transform: translateY(-65px);
+  position: fixed;
+  background: #fff;
+  box-shadow: 0 2px 2px -2px rgba(0, 0, 0, 0.15); }
